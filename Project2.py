@@ -18,7 +18,6 @@ def get_titles_from_search_results(filename):
     soup = BeautifulSoup(o, 'html.parser')
     titles = soup.find_all('a', class_ = "bookTitle")
     new_titles = titles.find_all('span', itemprop="name")
-
     authors = soup.find_all("a", class_="authorName")
     new_authors = authors.find_all('span', itemprop="name")
 
@@ -44,9 +43,17 @@ def get_search_links():
     “https://www.goodreads.com/book/show/kdkd".
 
     """
-    url = "https://www.goodreads.com/book/show/"
+
+    url = "https://www.goodreads.com/search?q=fantasy&qid=NwUsLiA2Nc"  
     resp = requests.get(url)
-    soup = BeautifulSoup(resp.content, 'html.parser')
+    soup = BeautifulSoup(resp.text, "html.parser")
+    new = soup.find_all("a", class_="bookTitle").get("href")  
+    lst = []
+    
+    for i in new:
+        lst.append("https://www.goodreads.com" + i)
+    
+    return lst[:9]
 
 
 def get_book_summary(book_url):
@@ -63,7 +70,9 @@ def get_book_summary(book_url):
     Make sure to strip() any newlines from the book title and number of pages.
     """
 
-    pass
+    resp = requests.get(book_url)
+    soup = BeautifulSoup(resp.text, "html.parser")
+    new = soup.find_all("a", class_="bookTitle").get("href")  
 
 
 def summarize_best_books(filepath):
@@ -121,7 +130,7 @@ class TestCases(unittest.TestCase):
     # call get_search_links() and save it to a static variable: search_urls
 
 
-    #def test_get_titles_from_search_results(self):
+    def test_get_titles_from_search_results(self):
         # call get_titles_from_search_results() on search_results.htm and save to a local variable
 
         # check that the number of titles extracted is correct (20 titles)
@@ -133,8 +142,9 @@ class TestCases(unittest.TestCase):
         # check that the first book and author tuple is correct (open search_results.htm and find it)
 
         # check that the last title is correct (open search_results.htm and find it)
+        pass
 
-    #def test_get_search_links(self):
+    def test_get_search_links(self):
         # check that TestCases.search_urls is a list
 
         # check that the length of TestCases.search_urls is correct (10 URLs)
@@ -142,9 +152,9 @@ class TestCases(unittest.TestCase):
 
         # check that each URL in the TestCases.search_urls is a string
         # check that each URL contains the correct url for Goodreads.com followed by /book/show/
+        pass
 
-
-    #def test_get_book_summary(self):
+    def test_get_book_summary(self):
         # create a local variable – summaries – a list containing the results from get_book_summary()
         # for each URL in TestCases.search_urls (should be a list of tuples)
 
@@ -159,9 +169,9 @@ class TestCases(unittest.TestCase):
             # check that the third element in the tuple, i.e. pages is an int
 
             # check that the first book in the search has 337 pages
+        pass
 
-
-    #def test_summarize_best_books(self):
+    def test_summarize_best_books(self):
         # call summarize_best_books and save it to a variable
 
         # check that we have the right number of best books (20)
@@ -174,8 +184,9 @@ class TestCases(unittest.TestCase):
 
         # check that the last tuple is made up of the following 3 strings: 'Picture Books', 'Antiracist Baby', 'https://www.goodreads.com/choiceawards/best-picture-books-2020'
 
+        pass
 
-    #def test_write_csv(self):
+    def test_write_csv(self):
         # call get_titles_from_search_results on search_results.htm and save the result to a variable
 
         # call write csv on the variable you saved and 'test.csv'
@@ -190,7 +201,7 @@ class TestCases(unittest.TestCase):
         # check that the next row is 'Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling'
 
         # check that the last row is 'Harry Potter: The Prequel (Harry Potter, #0.5)', 'J.K. Rowling'
-
+        pass
 
 
 #if __name__ == '__main__':

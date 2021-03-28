@@ -15,15 +15,21 @@ def get_titles_from_search_results(filename):
     [('Book title 1', 'Author 1'), ('Book title 2', 'Author 2')...]
     """
     o = open(filename)
-    soup = BeautifulSoup(o, 'html.parser')
+    r = o.read()
+    soup = BeautifulSoup(r, 'html.parser')
     titles = soup.find_all('a', class_ = "bookTitle")
-    new_titles = titles.find_all('span', itemprop="name")
+    new_titles = []
+    for i in titles:
+        new_titles.append(i.text.strip())
+
     authors = soup.find_all("a", class_="authorName")
-    new_authors = authors.find_all('span', itemprop="name")
+    new_authors = []
+    for i in authors:
+        new_authors.append(i.text.strip())
 
     new = []
     for i in range(len(new_titles)):
-        ap = (new_titles.text[i], new_authors.text[i])
+        ap = (new_titles[i], new_authors[i])
         new.append(ap)
     return new
     
@@ -47,14 +53,14 @@ def get_search_links():
     url = "https://www.goodreads.com/search?q=fantasy&qid=NwUsLiA2Nc"  
     resp = requests.get(url)
     soup = BeautifulSoup(resp.text, "html.parser")
-    new = soup.find_all("a", class_="bookTitle").get("href")  
+    new = soup.find_all("a", class_="bookTitle")
     lst = []
-    
     for i in new:
-        lst.append("https://www.goodreads.com" + i)
+        lst.append("https://www.goodreads.com" + i['href'])
     
-    return lst[:9]
+    return lst[:10]
 
+print(get_search_links())
 
 def get_book_summary(book_url):
     """
@@ -72,8 +78,15 @@ def get_book_summary(book_url):
 
     resp = requests.get(book_url)
     soup = BeautifulSoup(resp.text, "html.parser")
-    new = soup.find_all("a", class_="bookTitle").get("href")  
+    name = soup.find("h1", class_="gr-h1--serif")
+    name_good = name.text.strip()
+    pages = soup.find("span", itemprop = "numberOfPages")
+    pages_good = pages.text.strip()
+    author = soup.find("span", itemprop="name")
+    author_good = author.text.strip()
+    return (name_good, pages_good, author_good)
 
+print(get_book_summary('https://www.goodreads.com/book/show/6542645-fantasy-in-death?from_search=true&from_srp=true&qid=NwUsLiA2Nc&rank=2'))
 
 def summarize_best_books(filepath):
     """
@@ -88,10 +101,8 @@ def summarize_best_books(filepath):
     """
     f = open(filepath)
     soup = BeautifulSoup(f, "html.parser")
-    print(soup)
+    #print(soup)
     f.close()
-
-print(summarize_best_books("search_results.htm"))
 
 def write_csv(data, filename):
     """

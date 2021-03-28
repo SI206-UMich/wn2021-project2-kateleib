@@ -33,7 +33,7 @@ def get_titles_from_search_results(filename):
         new.append(ap)
     return new
     
-print(get_titles_from_search_results("search_results.htm"))
+#print(get_titles_from_search_results("search_results.htm"))
 
 
 def get_search_links():
@@ -60,7 +60,7 @@ def get_search_links():
     
     return lst[:10]
 
-print(get_search_links())
+#print(get_search_links())
 
 def get_book_summary(book_url):
     """
@@ -99,10 +99,24 @@ def summarize_best_books(filepath):
     ("Fiction", "The Testaments (The Handmaid's Tale, #2)", "https://www.goodreads.com/choiceawards/best-fiction-books-2020") 
     to your list of tuples.
     """
-    f = open(filepath)
-    soup = BeautifulSoup(f, "html.parser")
-    #print(soup)
-    f.close()
+    o = open(filepath)
+    r = o.read()
+    soup = BeautifulSoup(r, "html.parser")
+
+    cat = soup.find_all('h4', class_ = 'category__copy')
+    category = []
+    for i in cat:
+        category.append(i.text.strip())
+    print(category)
+
+    name = soup.find_all("img", class_="category__winnerImage")
+    print(name)
+    names = []
+
+
+
+print(summarize_best_books("best_books_2020.htm"))
+
 
 def write_csv(data, filename):
     """

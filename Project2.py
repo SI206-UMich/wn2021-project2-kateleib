@@ -110,9 +110,17 @@ def summarize_best_books(filepath):
     print(category)
 
     name = soup.find_all("img", class_="category__winnerImage")
-    print(name)
     names = []
+    for i in name:
+        names.append(i['alt'])
 
+    link = soup.find_all("a")
+    print(link)
+
+
+    print(names)
+    print(len(category))
+    print(len(names))
 
 
 print(summarize_best_books("best_books_2020.htm"))

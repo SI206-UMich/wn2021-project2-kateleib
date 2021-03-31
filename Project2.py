@@ -86,7 +86,7 @@ def get_book_summary(book_url):
     author_good = author.text.strip()
     return (name_good, pages_good, author_good)
 
-print(get_book_summary('https://www.goodreads.com/book/show/6542645-fantasy-in-death?from_search=true&from_srp=true&qid=NwUsLiA2Nc&rank=2'))
+#print(get_book_summary('https://www.goodreads.com/book/show/6542645-fantasy-in-death?from_search=true&from_srp=true&qid=NwUsLiA2Nc&rank=2'))
 
 def summarize_best_books(filepath):
     """
@@ -107,20 +107,26 @@ def summarize_best_books(filepath):
     category = []
     for i in cat:
         category.append(i.text.strip())
-    print(category)
+    #print(category)
 
     name = soup.find_all("img", class_="category__winnerImage")
     names = []
     for i in name:
         names.append(i['alt'])
+    #print(names)
 
-    link = soup.find_all("a")
-    print(link)
+    link = soup.find_all('div', class_ = 'category clearFix')
+    url = []
+    for i in link:
+        new = i.find('a').get('href')
+        url.append(new)
+    #print(url)
 
+    c = len(category)
+    n = len(names)
+    u = len(url)
+    print(c, n, u)
 
-    print(names)
-    print(len(category))
-    print(len(names))
 
 
 print(summarize_best_books("best_books_2020.htm"))

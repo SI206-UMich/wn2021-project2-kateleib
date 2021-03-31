@@ -33,7 +33,7 @@ def get_titles_from_search_results(filename):
         new.append(ap)
     return new
     
-#print(get_titles_from_search_results("search_results.htm"))
+print(get_titles_from_search_results("search_results.htm")[-1])
 
 
 def get_search_links():
@@ -175,21 +175,26 @@ def extra_credit(filepath):
 class TestCases(unittest.TestCase):
 
     # call get_search_links() and save it to a static variable: search_urls
-
+    search_urls = get_search_links()
 
     def test_get_titles_from_search_results(self):
         # call get_titles_from_search_results() on search_results.htm and save to a local variable
+        data = get_titles_from_search_results("search_results.htm")
 
         # check that the number of titles extracted is correct (20 titles)
+        self.assertEqual(len(data), 20)
 
         # check that the variable you saved after calling the function is a list
+        self.assertIsInstance(data, list)
 
         # check that each item in the list is a tuple
+        for i in data:
+            self.assertIsInstance(i, tuple)
 
         # check that the first book and author tuple is correct (open search_results.htm and find it)
+        self.assertEqual(data[0], ('Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling'))
 
         # check that the last title is correct (open search_results.htm and find it)
-        pass
 
     def test_get_search_links(self):
         # check that TestCases.search_urls is a list

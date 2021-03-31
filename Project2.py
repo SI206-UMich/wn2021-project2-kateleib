@@ -122,14 +122,16 @@ def summarize_best_books(filepath):
         url.append(new)
     #print(url)
 
-    c = len(category)
-    n = len(names)
-    u = len(url)
-    print(c, n, u)
+    final = []
+    for i in range(len(category)):
+        c = category[i]
+        n = names[i]
+        u = url[i]
+        final.append((c, n, u))
+    return(final)
 
 
-
-print(summarize_best_books("best_books_2020.htm"))
+#print(summarize_best_books("best_books_2020.htm"))
 
 
 def write_csv(data, filename):
@@ -152,7 +154,13 @@ def write_csv(data, filename):
 
     This function should not return anything.
     """
-    pass
+    with open(filename, 'w') as f:
+        write = csv.writer(f)
+        write.writerow('Book title', 'Author Name')
+        for i in data:
+            name = i[0]
+            author = i[1]
+            write.writerow(name, author)
 
 
 def extra_credit(filepath):

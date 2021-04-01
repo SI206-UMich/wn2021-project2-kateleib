@@ -18,22 +18,27 @@ def get_titles_from_search_results(filename):
     r = o.read()
     soup = BeautifulSoup(r, 'html.parser')
     titles = soup.find_all('a', class_ = "bookTitle")
-    new_titles = []
-    for i in titles:
-        new_titles.append(i.text.strip())
+    #new_titles = []
+    #for i in titles:
+        #new_titles.append(i.text.strip())
 
     authors = soup.find_all("a", class_="authorName")
-    new_authors = []
-    for i in authors:
-        new_authors.append(i.text.strip())
+    #new_authors = []
+    #for i in authors:
+        #new_authors.append(i.text.strip())
 
-    new = []
-    for i in range(len(new_titles)):
-        ap = (new_titles[i], new_authors[i])
-        new.append(ap)
-    return new
+    #new = []
+    #for i in range(len(new_titles)):
+        #ap = (new_titles[i], new_authors[i])
+        #new.append(ap)
+    #return new
+    neww = []
+    for i in range(len(titles)):
+        neww.append((titles[i].text.strip(), authors[i].text.strip()))
+    return neww
+
     
-print(get_titles_from_search_results("search_results.htm")[-1])
+#print(get_titles_from_search_results("search_results.htm"))
 
 
 def get_search_links():
@@ -195,33 +200,55 @@ class TestCases(unittest.TestCase):
         self.assertEqual(data[0], ('Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling'))
 
         # check that the last title is correct (open search_results.htm and find it)
+        self.assertEqual(data[-1][0], 'Harry Potter: The Prequel (Harry Potter, #0.5)')
 
     def test_get_search_links(self):
         # check that TestCases.search_urls is a list
+        self.assertIsInstance(TestCases.search_urls, list)
 
         # check that the length of TestCases.search_urls is correct (10 URLs)
-
+        self.assertEqual(len(TestCases.search_urls), 10)
 
         # check that each URL in the TestCases.search_urls is a string
+        for i in TestCases.search_urls:
+            self.assertIsInstance(i, str)
+
         # check that each URL contains the correct url for Goodreads.com followed by /book/show/
-        pass
+        for i in TestCases.search_urls:
+            self.assertEqual(i[0:36], "https://www.goodreads.com/book/show/")
 
     def test_get_book_summary(self):
         # create a local variable – summaries – a list containing the results from get_book_summary()
         # for each URL in TestCases.search_urls (should be a list of tuples)
 
-        # check that the number of book summaries is correct (10)
+        summaries = []
+        for i in TestCases.search_urls:
+            summaries.append(get_book_summary(i))
+        print(summaries)
 
+        # check that the number of book summaries is correct (10)
+        self.assertEqual(len(summaries), 10)
+        
             # check that each item in the list is a tuple
+        for i in summaries:
+            self.assertIsInstance(i, tuple)
 
             # check that each tuple has 3 elements
+        for i in summaries:
+            self.assertEqual(len(i), 3)
 
             # check that the first two elements in the tuple are string
+        for i in summaries:
+            self.assertIsInstance(i[0], str)
+            self.assertIsInstance(i[1], str)
 
             # check that the third element in the tuple, i.e. pages is an int
+        for i in summaries:
+            self.assertIsInstance(i[2], str)
 
             # check that the first book in the search has 337 pages
-        pass
+        self.assertEqual(summaries[0][2], 337)
+        
 
     def test_summarize_best_books(self):
         # call summarize_best_books and save it to a variable
@@ -256,7 +283,7 @@ class TestCases(unittest.TestCase):
         pass
 
 
-#if __name__ == '__main__':
+if __name__ == '__main__':
     print(extra_credit("extra_credit.htm"))
     unittest.main(verbosity=2)
 

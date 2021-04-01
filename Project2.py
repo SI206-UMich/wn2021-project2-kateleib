@@ -135,11 +135,6 @@ def summarize_best_books(filepath):
 
 
 #print(summarize_best_books("best_books_2020.htm"))
-this = summarize_best_books("best_books_2020.htm")
-f = this[0]
-l = this[-1]
-print('first is', f)
-print('last is', l)
 
 def write_csv(data, filename):
     """

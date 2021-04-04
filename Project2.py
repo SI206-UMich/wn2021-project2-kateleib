@@ -17,21 +17,23 @@ def get_titles_from_search_results(filename):
     o = open(filename)
     r = o.read()
     soup = BeautifulSoup(r, 'html.parser')
-    titles = soup.find_all('a', class_ = "bookTitle")
-    new_titles = []
-    for i in titles:
-        new_titles.append(i.text.strip())
 
-    authors = soup.find_all("a", class_="authorName")
+    new_titles = []
     new_authors = []
-    for i in authors:
-        new_authors.append(i.text.strip())
+
+    info = soup.find_all('tr')
+    for i in info:
+        title = i.find('a', class_ = 'bookTitle')
+        titlenew = title.find('span').text
+        new_titles.append(titlenew)
+        author = i.find('a', class_ = 'authorName')
+        authornew = author.find('span').text
+        new_authors.append(authornew)
 
     final = list(zip(new_titles, new_authors))
     o.close()
     return final
 
-    
 #print(get_titles_from_search_results("search_results.htm"))
 
 
